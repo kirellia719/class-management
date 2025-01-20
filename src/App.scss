@@ -1,4 +1,11 @@
 .App {
-  width: 100vw;
-  height: 100dvh;
+   width: 100vw;
+   height: 100dvh;
+   background-color: rgb(125, 174, 248);
+   //  overflow: hidden;
+   overflow-y: scroll;
+
+   .div {
+      width: 100%;
+   }
 }

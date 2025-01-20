@@ -19,7 +19,9 @@ a:hover {
 * {
    margin: 0;
    padding: 0;
+   border: none;
    box-sizing: border-box;
+   position: relative;
    font-size: 1rem;
 }
 
@@ -46,8 +48,4 @@ a:hover {
          background-color: #7f7e7e;
       }
    }
-}
-
-.my-modal {
-   max-width: 400px !important;
 }

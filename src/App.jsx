@@ -1,51 +1,35 @@
 import "./App.scss";
 
-import router_dom from "./utils/router";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import axios from "axios";
+import { useQuery } from "react-query";
 
-import MainLayout from "./layout/MainLayout/MainLayout";
+const fetchPosts = async () => {
+   const res = await axios.get("https://jsonplaceholder.typicode.com/posts/");
+   return res.data;
+};
 
-import store from "./redux";
-import { Provider } from "react-redux";
-import AuthLayout from "./layout/AuthLayout";
-import ProfilePage from "~/page/ProfilePage";
-import ToastContainer from "rsuite/esm/toaster/ToastContainer";
-
-import Test from "./component/Test";
-import { ToastContainer as ToastifyContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-const router = createBrowserRouter([
-   { path: "/test", element: <Test /> },
-   {
-      path: "/",
-      element: <MainLayout />,
-      children: [
-         ...router_dom.map((r) => ({
-            path: `${r.link}/*`,
-            element: <r.page />,
-         })),
-         {
-            path: "/profile",
-            element: <ProfilePage />,
-         },
-      ],
-   },
-   {
-      path: "/auth",
-      element: <AuthLayout />,
-   },
-]);
+// App.js
 
 const App = () => {
+   const { isLoading, error, data: posts } = useQuery("posts", fetchPosts);
+   if (isLoading) {
+      return <div>Loading...</div>;
+   }
+
+   if (error) {
+      return <div>Error: {error.message}</div>;
+   }
    return (
-      <Provider store={store}>
-         <ToastContainer />
-         <ToastifyContainer />
-         <div className="App">
-            <RouterProvider router={router} />
+      <div className="App">
+         <div className="div">
+            {/* <h1>Posts</h1> */}
+            <ul>
+               {posts.map((post) => (
+                  <li key={post.id}>{post.title}</li>
+               ))}
+            </ul>
          </div>
-      </Provider>
+      </div>
    );
 };
 
