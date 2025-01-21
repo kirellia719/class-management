@@ -1,34 +1,23 @@
 import "./App.scss";
+import 'boxicons'
 
-import axios from "axios";
+import { useEffect } from "react";
 import { useQuery } from "react-query";
 
-const fetchPosts = async () => {
-   const res = await axios.get("https://jsonplaceholder.typicode.com/posts/");
-   return res.data;
-};
+import usePostStore from "./store/postsStore";
+import { getPosts } from "./api/postAPI";
+
+import AuthLayout from "./layout/AuthLayout"
+import { Route, Routes } from "react-router-dom";
 
 // App.js
 
 const App = () => {
-   const { isLoading, error, data: posts } = useQuery("posts", fetchPosts);
-   if (isLoading) {
-      return <div>Loading...</div>;
-   }
-
-   if (error) {
-      return <div>Error: {error.message}</div>;
-   }
    return (
       <div className="App">
-         <div className="div">
-            {/* <h1>Posts</h1> */}
-            <ul>
-               {posts.map((post) => (
-                  <li key={post.id}>{post.title}</li>
-               ))}
-            </ul>
-         </div>
+         <Routes>
+            <Route index path="/" element={<AuthLayout />} />
+         </Routes>
       </div>
    );
 };
