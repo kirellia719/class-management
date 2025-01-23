@@ -12,7 +12,7 @@ export default defineConfig({
          "~/pages": path.resolve(__dirname, "./src/page/"),
          "~/redux/": path.resolve(__dirname, "./src/redux/"),
          env: path.resolve(__dirname, "./src/env"),
-         api: path.resolve(__dirname, "./src/service/api"),
+         api: path.resolve(__dirname, "./src/api"),
       },
    },
 });

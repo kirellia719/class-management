@@ -1,10 +1,17 @@
 import "./style.scss";
 
-const AuthLayout = () => {
+import LoginForm from "./LoginForm";
+import useAuthStore from "../../store/authStore";
+import { Navigate } from "react-router-dom";
 
-   return (
+const AuthLayout = () => {
+   const { token } = useAuthStore();
+   if (token) {
+      return <Navigate to="/" />;
+   }
+   else return (
       <div className="AuthLayout">
-         AUTH
+         <LoginForm />
       </div>
    );
 };

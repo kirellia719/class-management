@@ -1,0 +1,35 @@
+.webname {
+   font-family: "Dancing Script", sans-serif;
+   font-size: 2rem;
+   font-weight: 800;
+   margin-left: 20px;
+}
+
+.sidebar {
+   display: flex;
+   flex-direction: column;
+   height: 100%;
+
+   .siderbar-body {
+      flex-grow: 1;
+      .nav-item {
+         margin-top: 5px;
+         transition: 0.5s ease-in-out;
+
+         &.active {
+            background-color: rgb(52, 128, 214);
+            color: #fff;
+         }
+
+         .nav-icon {
+            color: inherit;
+         }
+      }
+   }
+
+   .sidebar-footer {
+      .logout-icon {
+         transform: rotate(180deg);
+      }
+   }
+}
