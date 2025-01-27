@@ -19,15 +19,16 @@ const Sidebar = () => {
     };
     return <div className="sidebar">
         <Toolbar className="sidebar-header" onClick={() => navigate("/")}>
-            <Avatar src="logo.jpg" alt="Class" />
+            <Avatar src="/logo.jpg" alt="Class" />
             <div className="webname">Youth</div>
         </Toolbar>
         <Divider />
         <List className="siderbar-body">
-            {sidebar.map((item) => {
+            {sidebar.filter(s => s.isSidebar).map((item, index) => {
                 const Icon = item.icon;
+                const isActive = location.split('/')[1] === item.link.split('/')[1];
                 return (
-                    <ListItem key={item.id} disablePadding onClick={() => navigate(item.link)} className={`nav-item ${location == item.link ? "active" : ""}`}>
+                    <ListItem key={item.label + "-" + index} disablePadding onClick={() => navigate(item.link)} className={`nav-item ${isActive ? "active" : ""}`}>
                         <ListItemButton>
                             <ListItemIcon className="nav-icon">
                                 <Icon />

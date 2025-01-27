@@ -1,9 +1,7 @@
 import { useState } from 'react';
 
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
-import Toolbar from '@mui/material/Toolbar';
 import { Outlet } from 'react-router-dom';
 
 import Sidebar from "../../components/Sidebar"
@@ -35,9 +33,7 @@ const TeacherLayout = (props) => {
     // Remove this const when copying and pasting into your project.
     const container = window !== undefined ? () => window().document.body : undefined;
 
-    return <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <Navbar drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle} />
+    return <Box sx={{ display: 'flex', height: '100%', }}>
         <Box
             component="nav"
             sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -71,14 +67,19 @@ const TeacherLayout = (props) => {
                 {drawer}
             </Drawer>
         </Box>
-        <Box
-            component="main"
-            sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-        >
-            <Toolbar />
-            <Outlet />
+        <Box style={{
+            width: { xs: '100%', sm: `calc(100% - ${drawerWidth}px)` },
+            display: 'flex',
+            flexGrow: 1,
+            flexDirection: 'column',
+            overflowY: 'auto',
+        }}>
+            <Navbar drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle} />
+            <div style={{ flexGrow: 1, overflowY: 'auto', padding: 10, backgroundColor: "#f1f4f9" }}>
+                <Outlet />
+            </div>
         </Box>
-    </Box>
+    </Box >
 }
 
 export default TeacherLayout;

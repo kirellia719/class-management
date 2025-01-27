@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import sidebar from "./utils/sidebar";
 import AuthLayout from "./layout/AuthLayout";
 import MainLayout from "./layout/MainLayout";
+import Notfound from "./pages/Notfound";
 const queryClient = new QueryClient();
 
 // App.js
@@ -20,13 +21,19 @@ const router = createBrowserRouter([
    {
       path: "/",
       element: <MainLayout />,
-      children: sidebar.map(item => {
-         const Element = item.element
-         return {
-            path: item.link,
-            element: <Element />
+      children: [
+         ...sidebar.map(item => {
+            const Element = item.element
+            return {
+               path: item.link,
+               element: <Element />
+            }
+         }),
+         {
+            path: "*",
+            element: <Notfound />
          }
-      })
+      ]
    }
 ])
 

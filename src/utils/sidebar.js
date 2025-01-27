@@ -2,31 +2,39 @@ import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 import MenuBookRoundedIcon from '@mui/icons-material/MenuBookRounded';
 import CottageRoundedIcon from '@mui/icons-material/CottageRounded';
 
-import CoursePage from "../pages/CoursePage"
+import Courses from "../pages/Courses"
 import ExamPage from "../pages/ExamPage"
 import Dashboard from '../pages/Dashboad';
+import Course from '../pages/Course';
 
 const sidebar = [
     {
-        id: 0,
         label: 'Trang chủ',
         icon: CottageRoundedIcon,
         link: '/',
         element: Dashboard,
+        isSidebar: true,
     },
     {
-        id: 1,
         label: 'Khoá học',
         icon: PeopleAltRoundedIcon,
-        link: '/course',
-        element: CoursePage,
+        link: '/courses/:courseId',
+        element: Course,
+        isSidebar: false,
     },
     {
-        id: 2,
+        label: 'Khoá học',
+        icon: PeopleAltRoundedIcon,
+        link: '/courses',
+        element: Courses,
+        isSidebar: true,
+    },
+    {
         label: 'Đề thi',
         icon: MenuBookRoundedIcon,
-        link: '/exam',
+        link: '/exams',
         element: ExamPage,
+        isSidebar: true,
     }
 ]
 

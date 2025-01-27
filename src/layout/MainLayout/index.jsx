@@ -5,7 +5,7 @@ import { useMutation } from 'react-query';
 import useAuthStore from '../../store/authStore';
 
 import api from 'api';
-import LoadingPage from "./LoadingPage";
+import LoadingPage from "../../components/LoadingPage";
 import TeacherLayout from './TeacherLayout';
 import StudentLayout from './StudentLayout';
 
