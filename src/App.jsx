@@ -22,35 +22,36 @@ const router = createBrowserRouter([
       path: "/",
       element: <MainLayout />,
       children: [
-         ...sidebar.map(item => {
-            const Element = item.element
+         ...sidebar.map((item) => {
+            const Element = item.element;
             return {
                path: item.link,
-               element: <Element />
-            }
+               element: <Element />,
+            };
          }),
          {
             path: "*",
-            element: <Notfound />
-         }
-      ]
-   }
-])
+            element: <Notfound />,
+         },
+      ],
+   },
+]);
 
 const App = () => {
-   return (<div className="App">
-      <QueryClientProvider client={queryClient}>
-         <ToastContainer />
-         <RouterProvider
-            router={router}
-            future={{
-               v7_startTransition: true,
-               v7_relativeSplatPath: true,
-            }}
-         />
-      </QueryClientProvider>
-
-   </div>);
+   return (
+      <div className="App">
+         <QueryClientProvider client={queryClient}>
+            <ToastContainer />
+            <RouterProvider
+               router={router}
+               future={{
+                  v7_startTransition: true,
+                  v7_relativeSplatPath: true,
+               }}
+            />
+         </QueryClientProvider>
+      </div>
+   );
 };
 
 export default App;
