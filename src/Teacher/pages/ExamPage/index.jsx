@@ -4,7 +4,7 @@ import { Button, Stack, Typography, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Edit, Delete, Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import teacherAPI from "api/teacherAPI"
+import teacherAPI from "../../teacherAPI"
 import LoadingPage from "~/components/LoadingPage";
 import { useQuery } from "react-query";
 

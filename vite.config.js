@@ -12,6 +12,7 @@ export default defineConfig({
          "~/pages": path.resolve(__dirname, "./src/page/"),
          "~/redux/": path.resolve(__dirname, "./src/redux/"),
          "env": path.resolve(__dirname, "./src/env"),
+         "teacher-api": path.resolve(__dirname, "./src/teacher/teacherAPI"),
          "api": path.resolve(__dirname, "./src/api"),
       },
    },

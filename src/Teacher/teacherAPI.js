@@ -1,6 +1,5 @@
 import a from "axios";
 import env from "env";
-const BE_URL = env.BE_URL;
 
 const headers = {
     "Access-Control-Allow-Origin": "*",
@@ -9,8 +8,9 @@ const headers = {
     "Access-Control-Allow-Credentials": "true",
 };
 
+const BE_URL = env.BE_URL;
 const axios = a.create({
-    baseURL: BE_URL, // URL cơ sở cho API
+    baseURL: `${BE_URL}/teacher`, // URL cơ sở cho API
     timeout: 3000, // Thời gian chờ tối đa là 3 giây (3000 ms)
 });
 
@@ -44,9 +44,22 @@ const api = {
     },
 };
 
-const authAPI = {
-    login: (user) => api.post(`/auth/login`, user),
-    getMe: () => api.get(`/auth/me`),
+const teacherAPI = {
+    //COURSE
+    getAllCourses: () => api.get("/course/all"),
+    deleteCourse: (courseId) => api.delete(`/course/${courseId}`),
+    createCourse: (data) => api.post("/course", data),
+    updateCourse: (courseId, data) => api.put(`/course/${courseId}`, data),
+
+    //STUDENT
+    addStudent: (courseId, data) => api.post(`/student/${courseId}`, data),
+    getStudentsInCourse: (courseId) => api.get(`/student/${courseId}`),
+    changePasswordStudent: (studentId, data) => api.put(`/student/password/${studentId}/`, data),
+    updateStudent: (studentId, data) => api.put(`/student/${studentId}`, data),
+
+    //EXAM
+    createExam: (exam) => api.post("/exam", exam),
+    getAllExams: () => api.get("/exam/all"),
 }
 
-export default authAPI;
+export default teacherAPI;

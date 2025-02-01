@@ -6,7 +6,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useMutation, useQueryClient } from "react-query";
 
-import teacherAPI from "api/teacherAPI";
+import teacherAPI from "teacher-api";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 

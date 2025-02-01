@@ -7,7 +7,7 @@ import { useMutation } from "react-query";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-import teacherAPI from "api/teacherAPI";
+import teacherAPI from "teacher-api";
 
 const ModalPassword = ({ open, onClose, student }) => {
    const [showPassword, setShowPassword] = useState(false);
