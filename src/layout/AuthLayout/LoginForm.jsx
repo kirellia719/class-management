@@ -6,8 +6,7 @@ import { toast } from 'react-toastify';
 import useAuthStore from '../../store/authStore';
 import { Button } from '@mui/material';
 
-import api from "api";
-
+import authAPI from "api/authAPI";
 const LoginForm = () => {
     const [input, setInput] = useState({ username: '', password: '' });
 
@@ -17,7 +16,7 @@ const LoginForm = () => {
 
     const loginMutation = useMutation(
         async (user) => {
-            const response = await api.post(`/auth/login`, user);
+            const response = await authAPI.login(user);
             return response;
         },
         {

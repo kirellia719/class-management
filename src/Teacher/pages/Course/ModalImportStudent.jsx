@@ -4,7 +4,7 @@ import * as XLSX from "xlsx";
 import { Button, Box } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
-import api from "api";
+import teacherAPI from "api/teacherAPI";
 import dayjs from "dayjs";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
@@ -100,7 +100,7 @@ const ImportExcelComponent = ({ onClose }) => {
    const handleConfirmUpload = async () => {
       setLoading(true);
       try {
-         const resArr = await Promise.all(rows.map((row) => api.post(`/student/${courseId}`, row)));
+         const resArr = await Promise.all(rows.map((row) => teacherAPI.addStudent(courseId, row)));
          console.log(resArr);
          queryClient.invalidateQueries("list-student");
          onClose();

@@ -4,12 +4,10 @@ import { Navigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import useAuthStore from '../../store/authStore';
 
-import api from 'api';
+import authAPI from 'api/authAPI';
 import LoadingPage from "../../components/LoadingPage";
-import TeacherLayout from './TeacherLayout';
-import StudentLayout from './StudentLayout';
-
-
+import TeacherLayout from "../../Teacher/TeacherLayout/TeacherLayout";
+import StudentLayout from '../../Student/StudentLayout/StudentLayout';
 
 const MainLayout = () => {
 
@@ -18,7 +16,7 @@ const MainLayout = () => {
 
    const mutation = useMutation(
       async () => {
-         const response = await api.get('/auth/me');
+         const response = await authAPI.getMe();
          return response;
       },
       {

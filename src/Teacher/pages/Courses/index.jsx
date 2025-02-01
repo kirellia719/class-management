@@ -5,23 +5,13 @@ import { useState } from "react";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
-import {
-   Button,
-   Dialog,
-   DialogActions,
-   DialogContent,
-   DialogTitle,
-   Divider,
-   Menu,
-   MenuItem,
-   TextField,
-} from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Menu, MenuItem, TextField, } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-import api from "api";
+import teacherAPI from "api/teacherAPI";
 import ModalCreateCourse from "./ModalCreateCourse";
 
-import LoadingPage from "../../components/LoadingPage";
+import LoadingPage from "~/components/LoadingPage";
 import { useNavigate } from "react-router-dom";
 import ModalUpdateCourse from "./ModalUpdateCourse";
 
@@ -70,13 +60,14 @@ function BasicMenu({ item, onDeleteClick, onUpdateClick }) {
    );
 }
 
+
 const CoursePage = () => {
    const queryClient = useQueryClient();
    const [filter, setFilter] = useState("");
    const navigate = useNavigate();
 
    const { data, isLoading } = useQuery("courses", async () => {
-      const response = await api.get("/course/all");
+      const response = await teacherAPI.getAllCourses();
       return response.data;
    });
 
@@ -87,7 +78,7 @@ const CoursePage = () => {
 
    const confirmDelete = async () => {
       try {
-         await api.delete(`/course/${deleteCourse._id}`);
+         await teacherAPI.deleteCourse(deleteCourse._id);
          setDeleteCourse(null);
          queryClient.invalidateQueries("courses");
       } catch (error) {

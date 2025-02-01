@@ -1,0 +1,17 @@
+.ExamPage {
+   background-color: #fff;
+   height: 100%;
+   padding: 20px;
+}
+
+.CreateExamPage {
+   height: 100%;
+
+   .quiz-header {
+      z-index: 9;
+      position: sticky;
+      top: 0;
+      background-color: #f1f4f9;
+      box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.2);
+   }
+}

@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, DialogActions, DialogTitle, TextField } from "@mui/material";
 import { useState } from "react";
-import api from "api";
+import teacherAPI from "api/teacherAPI";
 import { useQueryClient } from "react-query";
 
 const ModalUpdateCourse = ({ item, open, onClose }) => {
@@ -20,7 +20,7 @@ const ModalUpdateCourse = ({ item, open, onClose }) => {
       e.preventDefault();
       setLoading(true);
       try {
-         await api.put(`/course/${item._id}`, { name });
+         await teacherAPI.updateCourse(item._id, { name });
          queryClient.invalidateQueries("courses");
          onClose && onClose();
       } catch (error) {

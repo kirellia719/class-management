@@ -2,10 +2,12 @@ import { useState } from "react";
 
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import { Outlet } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import teacherSidebar from "../teacherSidebar";
+
 
 const drawerWidth = 250;
 
@@ -28,7 +30,7 @@ const TeacherLayout = (props) => {
       }
    };
 
-   const drawer = <Sidebar />;
+   const drawer = <Sidebar sidebar={teacherSidebar} />;
    // Remove this const when copying and pasting into your project.
    const container = window !== undefined ? () => window().document.body : undefined;
 
@@ -73,11 +75,19 @@ const TeacherLayout = (props) => {
             }}
          >
             <Navbar drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle} />
-            <Box sx={{ flexGrow: 1, overflowY: "auto", padding: { sm: 1, xs: 0 }, backgroundColor: "#f1f4f9" }}>
-               <Outlet />
+            <Box sx={{ flexGrow: 1, overflowY: "auto", backgroundColor: "#f1f4f9" }}>
+               <Routes>
+                  {teacherSidebar.map(s => {
+                     const Element = s.element;
+                     return <Route key={s.link}
+                        path={s.link}
+                        element={< Element />}
+                     />
+                  })}
+               </Routes>
             </Box>
          </Box>
-      </Box>
+      </Box >
    );
 };
 

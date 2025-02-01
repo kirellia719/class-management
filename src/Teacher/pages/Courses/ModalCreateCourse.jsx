@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 
-import api from "api";
+import teacherAPI from "api/teacherAPI";
 import { toast } from "react-toastify";
 
 const ModalCreateCourse = () => {
@@ -19,7 +19,7 @@ const ModalCreateCourse = () => {
 
    const mutation = useMutation(
       async () => {
-         const response = await api.post("/course", { name: courseName });
+         const response = await teacherAPI.createCourse({ name: courseName });
          return response;
       },
       {

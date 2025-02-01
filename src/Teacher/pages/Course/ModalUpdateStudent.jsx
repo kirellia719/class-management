@@ -8,12 +8,12 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useMutation, useQueryClient } from "react-query";
 
-import api from "api";
+import teacherAPI from "api/teacherAPI";
 
 const ModalUpdateStudent = ({ open, onClose, student }) => {
    const queryClient = useQueryClient();
 
-   const mutation = useMutation((newData) => api.put(`/student/${student.id}`, newData), {
+   const mutation = useMutation((newData) => teacherAPI.updateStudent(student.id, newData), {
       onSuccess: () => {
          // Refetch data after a successful create
          queryClient.invalidateQueries("list-student");

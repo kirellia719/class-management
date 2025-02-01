@@ -1,10 +1,10 @@
 import "./style.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useQuery, useQueryClient } from "react-query";
 import { DataGrid } from "@mui/x-data-grid";
 import { useParams } from "react-router-dom";
-import api from "api";
+import teacherAPI from "api/teacherAPI";
 
 import {
    Box,
@@ -25,13 +25,16 @@ import PhonelinkLockRoundedIcon from "@mui/icons-material/PhonelinkLockRounded";
 import ModalAddStudent from "./ModalAddStudent";
 import ModalUpdateStudent from "./ModalUpdateStudent";
 import ModalPassword from "./ModalPassword";
+import useTitleStore from "../../../store/titleStore";
 
 const ListStudent = () => {
    const queryClient = useQueryClient();
    const { courseId } = useParams();
 
+   const { setTitle, setBackButton } = useTitleStore();
+
    const { data, isLoading } = useQuery("list-student", async () => {
-      const req = await api.get(`/student/${courseId}`);
+      const req = await teacherAPI.getStudentsInCourse(courseId);
       return req.data;
    });
 
@@ -56,7 +59,7 @@ const ListStudent = () => {
    const handleDelete = async (listStudent) => {
       setLoading(true);
       try {
-         const resArr = await Promise.all(listStudent.map((id) => api.delete(`/student/${id}`)));
+         const resArr = await Promise.all(listStudent.map((id) => teacherAPI.delete(`/student/${id}`)));
          console.log("delete student", resArr);
 
          queryClient.invalidateQueries("list-student");
@@ -133,7 +136,19 @@ const ListStudent = () => {
       },
    ];
 
-   const listStudent = (data || []).map((s, index) => ({ id: s._id, stt: index + 1, ...s }));
+   const listStudent = (data?.students || []).map((s, index) => ({ id: s._id, stt: index + 1, ...s }));
+
+   useEffect(() => {
+      if (data) {
+         setTitle(data.name);
+         setBackButton("/courses")
+      }
+
+      return () => {
+         setTitle("");
+         setBackButton("");
+      }
+   }, [data, setBackButton, setTitle]);
 
    return (
       <div style={{ height: "100%", width: "100%" }}>

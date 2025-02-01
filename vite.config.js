@@ -8,11 +8,11 @@ export default defineConfig({
    resolve: {
       alias: {
          "~": path.resolve(__dirname, "./src/"),
-         "~/component": path.resolve(__dirname, "./src/component/"),
+         "~/components": path.resolve(__dirname, "./src/component/"),
          "~/pages": path.resolve(__dirname, "./src/page/"),
          "~/redux/": path.resolve(__dirname, "./src/redux/"),
-         env: path.resolve(__dirname, "./src/env"),
-         api: path.resolve(__dirname, "./src/api"),
+         "env": path.resolve(__dirname, "./src/env"),
+         "api": path.resolve(__dirname, "./src/api"),
       },
    },
 });

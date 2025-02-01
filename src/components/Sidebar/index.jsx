@@ -4,10 +4,10 @@ import { Avatar, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItem
 import { useLocation, useNavigate } from "react-router-dom";
 import LogoutIcon from '@mui/icons-material/Logout';
 
-import sidebar from "../../utils/sidebar";
 import useAuthStore from "../../store/authStore";
 
-const Sidebar = () => {
+const Sidebar = ({ sidebar }) => {
+
     const location = useLocation().pathname;
     const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const Sidebar = () => {
         </Toolbar>
         <Divider />
         <List className="siderbar-body">
-            {sidebar.filter(s => s.isSidebar).map((item, index) => {
+            {(sidebar || []).filter(s => s.isSidebar).map((item, index) => {
                 const Icon = item.icon;
                 const isActive = location.split('/')[1] === item.link.split('/')[1];
                 return (

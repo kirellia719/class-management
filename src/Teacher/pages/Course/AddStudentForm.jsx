@@ -6,7 +6,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useMutation, useQueryClient } from "react-query";
 
-import api from "api";
+import teacherAPI from "api/teacherAPI";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -14,7 +14,7 @@ const AddStudentForm = ({ onClose }) => {
    const { courseId } = useParams();
    const queryClient = useQueryClient();
 
-   const mutation = useMutation((newData) => api.post(`/student/${courseId}`, newData), {
+   const mutation = useMutation((newData) => teacherAPI.addStudent(courseId, newData), {
       onSuccess: () => {
          // Refetch data after a successful create
          queryClient.invalidateQueries("list-student");

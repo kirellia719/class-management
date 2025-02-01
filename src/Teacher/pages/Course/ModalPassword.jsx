@@ -7,13 +7,13 @@ import { useMutation } from "react-query";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-import api from "api";
+import teacherAPI from "api/teacherAPI";
 
 const ModalPassword = ({ open, onClose, student }) => {
    const [showPassword, setShowPassword] = useState(false);
    const [error, setError] = useState("");
 
-   const mutation = useMutation((newData) => api.put(`/student/password/${student.id}/`, newData), {
+   const mutation = useMutation((newData) => teacherAPI.changePasswordStudent(student.id, newData), {
       onSuccess: () => {
          // Refetch data after a successful create
          toast.success("Đã đổi mật khẩu", { autoClose: 2000 });
@@ -75,7 +75,7 @@ const ModalPassword = ({ open, onClose, student }) => {
                   variant="filled"
                   value={student?.username}
                   readOnly
-                  // sx={{ paddingX: 1 }}
+               // sx={{ paddingX: 1 }}
                />
                <TextField
                   label="Mật khẩu mới"
