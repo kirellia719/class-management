@@ -9,20 +9,14 @@ const Navbar = ({ drawerWidth = 0, handleDrawerToggle = () => { } }) => {
     const navigate = useNavigate();
     const { user } = useAuthStore();
     const { title, backButton } = useTitleStore();
-    console.log("123", user);
-
 
     if (!user) return null; // Return null if user is not authenticated
 
     else return <>
         <div
             style={{
-                zIndex: 10,
                 width: { sm: `calc(100% - ${drawerWidth}px)` },
                 ml: { sm: `${drawerWidth}px` },
-                backgroundColor: "white",
-                color: '#000',
-                boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)'
             }}
         >
             <Toolbar className="navbar">

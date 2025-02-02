@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthLayout from "./layout/AuthLayout";
 import MainLayout from "./layout/MainLayout";
+import Notfound from "./components/Notfound";
 const queryClient = new QueryClient();
 
 // App.js
@@ -18,10 +19,10 @@ const router = createBrowserRouter([
       path: "/*",
       element: <MainLayout />,
    },
-   // {
-   //    path: "/*",
-   //    element: <Notfound />,
-   // },
+   {
+      path: "*",
+      element: <Notfound />,
+   },
 ]);
 
 const App = () => {

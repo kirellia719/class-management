@@ -20,7 +20,7 @@ const MainLayout = () => {
          return response;
       },
       {
-         retry: 1, // Thử lại tối đa 3 lần khi gặp lỗi
+         retry: 1, // Thử lại 
          onSuccess: ({ data }) => {
             data && setUser(data);
          },

@@ -60,7 +60,6 @@ const ListStudent = () => {
       setLoading(true);
       try {
          const resArr = await Promise.all(listStudent.map((id) => teacherAPI.delete(`/student/${id}`)));
-         console.log("delete student", resArr);
 
          queryClient.invalidateQueries("list-student");
       } catch (error) {

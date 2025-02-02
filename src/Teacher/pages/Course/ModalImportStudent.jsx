@@ -101,7 +101,6 @@ const ImportExcelComponent = ({ onClose }) => {
       setLoading(true);
       try {
          const resArr = await Promise.all(rows.map((row) => teacherAPI.addStudent(courseId, row)));
-         console.log(resArr);
          queryClient.invalidateQueries("list-student");
          onClose();
       } catch (error) {

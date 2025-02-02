@@ -1,6 +1,6 @@
 import "./style.scss"
 import { useEffect, useState } from "react";
-import { Button, Stack, Typography, TextField, Paper, IconButton, RadioGroup, FormControlLabel, Radio, Select, MenuItem, Grid2, Box, InputLabel, OutlinedInput, Chip, useTheme, FormControl, SpeedDial } from "@mui/material";
+import { Button, Stack, Typography, TextField, Paper, IconButton, RadioGroup, FormControlLabel, Radio, Select, MenuItem, Grid2, Box, InputLabel, FormControl, SpeedDial, Switch } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import { Add, Delete } from "@mui/icons-material";
@@ -9,41 +9,32 @@ import teacherAPI from "teacher-api";
 import { useMutation, useQueryClient } from "react-query";
 import LoadingPage from "~/components/LoadingPage";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
-function getStyles(name, personName, theme) {
-    return {
-        fontWeight: personName.includes(name)
-            ? theme.typography.fontWeightMedium
-            : theme.typography.fontWeightRegular,
-    };
-}
-
 const answerLabels = ["A", "B", "C", "D"];
 
 const CreateExamPage = () => {
     const queryClient = useQueryClient();
-    const theme = useTheme();
     const navigate = useNavigate();
     const { setTitle, setBackButton } = useTitleStore();
 
-    const [exam, setExam] = useState({ title: "", duration: "", classes: [], questions: [] });
-    const [availableClasses, setAvailableClasses] = useState([]);
+    const [exam, setExam] = useState({
+        title: "",
+        description: "",
+        attemptsAllowed: 1,
+        shuffleQuestions: false,
+        isOpen: false,
+        dateClose: null,
+        duration: 0,
+        course: ""
+    });
+
+    const [questions, setQuestions] = useState([]);
+    const [availableCourses, setAvailableCourses] = useState([]);
 
     useEffect(() => {
         const fetchClasses = async () => {
             try {
                 const response = await teacherAPI.getAllCourses();
-
-                setAvailableClasses(response.data);
+                setAvailableCourses(response.data);
             } catch (error) {
                 console.log(error);
 
@@ -65,7 +56,7 @@ const CreateExamPage = () => {
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async (examData) => {
-            const response = await api.createExam(examData);
+            const response = await teacherAPI.createExam(examData);
             return response.data;
         },
         onSuccess: () => {
@@ -77,52 +68,58 @@ const CreateExamPage = () => {
     });
 
 
-    const handleChange = (e) => setExam({ ...exam, [e.target.name]: e.target.value });
+    const handleChange = (e) => {
+        setExam({ ...exam, [e.target.name]: e.target.value })
+    };
 
 
     const handleClassChange = (event) => {
         const { target: { value } } = event;
-        setExam({ ...exam, classes: typeof value === 'string' ? value.split(',') : value, });
+        setExam({ ...exam, course: value });
+
     };
 
-    const handleAddQuestion = () => setExam({ ...exam, questions: [...exam.questions, { question: "", options: ["", "", "", ""], correctAnswer: 0 }] });
+    const handleAddQuestion = () => setQuestions([...questions, { content: "", options: ["", "", "", ""], correctAnswer: 0 }]);
 
 
     const handleQuestionChange = (index, field, value) => {
-        const newQuestions = [...exam.questions];
+        const newQuestions = [...questions];
         newQuestions[index][field] = value;
-        setExam({ ...exam, questions: newQuestions });
+        setQuestions(newQuestions);
     };
 
     const handleOptionChange = (qIndex, optIndex, value) => {
-        const newQuestions = [...exam.questions];
+        const newQuestions = [...questions];
         newQuestions[qIndex].options[optIndex] = value;
-        setExam({ ...exam, questions: newQuestions });
+        setQuestions(newQuestions);
     };
 
     const handleCorrectAnswerChange = (qIndex, value) => {
-        const newQuestions = [...exam.questions];
+        const newQuestions = [...questions];
         newQuestions[qIndex].correctAnswer = parseInt(value);
-        setExam({ ...exam, questions: newQuestions });
+        setQuestions(newQuestions);
     };
 
     const handleDeleteQuestion = (index) => {
-        const newQuestions = exam.questions.filter((_, i) => i !== index);
-        setExam({ ...exam, questions: newQuestions });
+        const newQuestions = questions.filter((_, i) => i !== index);
+        setQuestions(newQuestions);
     };
 
     const handleSave = () => {
-        const pack = { title: exam.title, duration: exam.duration, courses: exam.classes.map(c => c._id), questions: exam.questions };
+        const pack = {
+            ...exam,
+            course: exam.course._id,
+            questions: questions
+        };
         mutate(pack, {
             onSuccess: (data) => {
-                console.log("Đề thi được tạo thành công:", data);
                 navigate("/exams")
             }
         });
 
     };
 
-    const isFormValid = exam.title && exam.duration && exam.classes.length > 0 && exam.questions.length > 0;
+    const isFormValid = exam.title && exam.duration && questions.length > 0;
 
     return (
         <>
@@ -137,60 +134,102 @@ const CreateExamPage = () => {
                 {/* Phần thông tin bài thi */}
                 <Box sx={{ padding: 2, m: 0 }}>
                     <Paper sx={{ padding: 2 }}>
-                        <Stack spacing={2}>
-                            <Grid2 container alignItems={"center"} justifyContent={"space-between"} spacing={2}>
-                                <Grid2 size={{ xs: "auto", md: 2 }}>
+                        <Stack spacing={3}>
+                            {/* DÒNG 1 */}
+                            <Grid2 container alignItems={"center"} justifyContent={"space-between"} spacing={5}>
+                                <Grid2 size={{ sm: 2 }}>
                                     <Typography sx={{ fontWeight: 500 }}>Tên bài thi</Typography>
                                 </Grid2>
-                                <Grid2 size={{ xs: "auto", md: 10 }}>
+                                <Grid2 size={{ sm: 10 }}>
                                     <TextField name="title" placeholder="Nhập tên đề thi ..." fullWidth value={exam.title} onChange={handleChange} />
                                 </Grid2>
                             </Grid2>
-                            <Grid2 container alignItems={"center"} justifyContent={"space-between"} spacing={2}>
-                                <Grid2 container size={{ xs: 12, md: 4 }}>
-                                    <Grid2 container size={{ xs: 6, md: 6 }} alignItems={"center"}>
-                                        <Typography sx={{ fontWeight: 500 }}>Thời gian (phút)</Typography>
+
+                            {/* Dòng 2 */}
+                            <Grid2 container justifyContent={"space-between"} alignItems={"center"} spacing={2}>
+                                <Grid2 container spacing={2} alignItems={"center"} size={{ sm: 6 }}>
+                                    <Grid2 size={{ sm: 4 }}>
+                                        <Typography sx={{ fontWeight: 500 }}>Thời gian </Typography>
                                     </Grid2>
-                                    <Grid2 size={{ xs: 6, md: 6 }}>
+                                    <Grid2 size={{ sm: 6 }}>
                                         <TextField type="number" placeholder="Nhập số phút ..." name="duration" fullWidth value={exam.duration} onChange={handleChange} />
                                     </Grid2>
                                 </Grid2>
-                                <Grid2 size={{ xs: 12, md: 6 }} container alignItems={"center"}>
-                                    <Grid2 size={{ xs: 6, md: 4 }} >
+                                <Grid2 container spacing={2} alignItems={"center"} size={{ sm: 6 }}>
+                                    <Grid2 size={{ sm: 4 }}>
+                                        <Typography sx={{ fontWeight: 500 }}>Số lần làm bài</Typography>
+                                    </Grid2>
+                                    <Grid2 size={{ sm: 6 }}>
+                                        <TextField type="number" placeholder="Số lần" name="attemptsAllowed" fullWidth value={exam.attemptsAllowed} onChange={handleChange} />
+                                    </Grid2>
+                                </Grid2>
+                            </Grid2>
+
+
+
+                            {/* Dòng 3 */}
+                            <Grid2 container spacing={2} >
+                                <Grid2 container size={{ sm: 3 }} spacing={2} alignItems={"center"}>
+                                    <Grid2>
+                                        <Switch
+                                            name="isOpen"
+                                            checked={exam.isOpen}
+                                            onChange={(e) => setExam({ ...exam, isOpen: e.target.checked })}
+                                        />
+                                    </Grid2>
+                                    <Grid2  >
+                                        <Typography sx={{ fontWeight: 500 }}>Mở</Typography>
+                                    </Grid2>
+                                </Grid2>
+                                <Grid2 container size={{ sm: 3 }} spacing={2} alignItems={"center"}>
+
+                                    <Grid2 >
+                                        <Switch
+                                            name="shuffleQuestions"
+                                            checked={exam.shuffleQuestions}
+                                            onChange={(e) => setExam({ ...exam, shuffleQuestions: e.target.checked })}
+                                        />
+                                    </Grid2>
+                                    <Grid2 >
+                                        <Typography sx={{ fontWeight: 500 }}>Đảo câu hỏi</Typography>
+                                    </Grid2>
+                                </Grid2>
+                                <Grid2 container size={{ sm: 6 }} spacing={2} alignItems={"center"}>
+                                    <Grid2 size={{ sm: 4 }} >
                                         <Typography sx={{ fontWeight: 500 }}>Lớp tham gia</Typography>
                                     </Grid2>
-                                    <Grid2 size={{ xs: 6, md: 8 }}>
+                                    <Grid2 size={{ sm: 8 }}>
                                         <FormControl sx={{ m: 1, width: "100%" }}>
                                             <InputLabel id="demo-multiple-chip-label">Chọn</InputLabel>
                                             <Select
-                                                labelId="demo-multiple-chip-label"
-                                                id="demo-multiple-chip"
-                                                multiple
-                                                value={exam.classes}
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={exam.course}
+                                                label="Khoá học"
                                                 onChange={handleClassChange}
-                                                input={<OutlinedInput label="Chip" />}
-                                                renderValue={(selected) => (
-                                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                        {selected.map((value) => (
-                                                            <Chip key={`selected-${value._id}`} label={value.name} />
-                                                        ))}
-                                                    </Box>
-                                                )}
-                                                MenuProps={MenuProps}
                                             >
-                                                {(availableClasses || []).map((c) => (
+                                                {(availableCourses || []).map((c) => (
                                                     <MenuItem
                                                         key={`menu-${c._id}`}
                                                         value={c}
-                                                        style={getStyles(c.name, exam.classes, theme)}
                                                     >
                                                         {c.name}
                                                     </MenuItem>
                                                 ))}
                                             </Select>
                                         </FormControl>
-
                                     </Grid2>
+                                </Grid2>
+                            </Grid2>
+
+
+                            {/* Dòng 4 */}
+                            <Grid2 container alignItems={"center"} justifyContent={"space-between"} spacing={5}>
+                                <Grid2>
+                                    <Typography sx={{ fontWeight: 500 }}>Mô tả</Typography>
+                                </Grid2>
+                                <Grid2 sx={{ flex: 1 }}>
+                                    <TextField name="description" placeholder="Thông báo" fullWidth value={exam.description} onChange={handleChange} />
                                 </Grid2>
                             </Grid2>
 
@@ -201,7 +240,7 @@ const CreateExamPage = () => {
                 <Box className="quiz-header" sx={{ padding: 2 }}>
                     <Paper sx={{ padding: 2 }}>
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="h6">Số lượng ({exam.questions.length})</Typography>
+                            <Typography variant="h6">Số lượng ({questions.length})</Typography>
                             <Stack direction="row" spacing={2} justifyContent="flex-end" >
                                 <Button variant="outlined" onClick={() => navigate("/exams")}>
                                     Hủy
@@ -216,7 +255,7 @@ const CreateExamPage = () => {
                 </Box>
                 <Box sx={{ p: 2 }}>
                     <Stack spacing={2} sx={{ p: 2 }}>
-                        {exam.questions.map((q, index) => (
+                        {questions.map((q, index) => (
                             <Paper key={index} sx={{ p: 2 }}>
                                 <Stack spacing={2}>
                                     <Grid2 container justifyContent={"space-between"} alignItems={"center"}>
@@ -228,9 +267,9 @@ const CreateExamPage = () => {
                                     <TextField
                                         multiline
                                         fullWidth
-                                        value={q.question}
+                                        value={q.content}
                                         placeholder="Nhập câu hỏi"
-                                        onChange={(e) => handleQuestionChange(index, "question", e.target.value)}
+                                        onChange={(e) => handleQuestionChange(index, "content", e.target.value)}
                                     />
                                     <Stack spacing={2}>
                                         <h1>Lựa chọn:</h1>
