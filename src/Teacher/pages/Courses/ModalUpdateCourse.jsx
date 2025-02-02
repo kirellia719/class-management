@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, DialogActions, DialogTitle, TextField } from "@mui/material";
 import { useState } from "react";
-import teacherAPI from "teacher-api";
+import teacherAPI from "../../teacherAPI";
 import { useQueryClient } from "react-query";
 
 const ModalUpdateCourse = ({ item, open, onClose }) => {

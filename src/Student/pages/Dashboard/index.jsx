@@ -4,7 +4,7 @@ import "./style.scss"
 import MailIcon from '@mui/icons-material/Mail';
 import { useQuery } from "react-query";
 
-import studentAPI from "student-api"
+import studentAPI from "../../studentAPI"
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {

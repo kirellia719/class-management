@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Add, Delete } from "@mui/icons-material";
 import useTitleStore from "../../../store/titleStore";
-import teacherAPI from "teacher-api";
+import teacherAPI from "../../teacherAPI";
 import { useMutation, useQueryClient } from "react-query";
 import LoadingPage from "~/components/LoadingPage";
 

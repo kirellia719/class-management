@@ -1,7 +1,7 @@
 import "./style.scss"
 
 import { useQuery } from "react-query";
-import studentAPI from "student-api";
+import studentAPI from "../../studentAPI";
 import { useNavigate, useParams } from "react-router-dom"; // Nếu sử dụng react-router-dom v6
 import LoadingPage from "../../../components/LoadingPage";
 import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";

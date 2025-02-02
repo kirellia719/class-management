@@ -2,7 +2,7 @@
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { useQuery } from 'react-query';
 import { Link, useParams } from 'react-router-dom';
-import studentAPI from 'student-api';
+import studentAPI from '../../studentAPI';
 import useTitleStore from '../../../store/titleStore';
 import { useEffect } from 'react';
 import LoadingPage from '../../../components/LoadingPage';

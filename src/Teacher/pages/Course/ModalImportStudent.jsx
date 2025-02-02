@@ -4,7 +4,7 @@ import * as XLSX from "xlsx";
 import { Button, Box } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
-import teacherAPI from "teacher-api";
+import teacherAPI from "../../teacherAPI";
 import dayjs from "dayjs";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";

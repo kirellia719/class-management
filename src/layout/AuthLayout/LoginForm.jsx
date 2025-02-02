@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import useAuthStore from '../../store/authStore';
 import { Button } from '@mui/material';
 
-import authAPI from "api/authAPI";
+import authAPI from "../../api/authAPI";
 const LoginForm = () => {
     const [input, setInput] = useState({ username: '', password: '' });
 

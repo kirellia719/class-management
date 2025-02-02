@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import useAuthStore from '../../store/authStore';
 
-import authAPI from 'api/authAPI';
+import authAPI from '../../api/authAPI';
 import LoadingPage from "../../components/LoadingPage";
 import TeacherLayout from "../../Teacher/TeacherLayout/TeacherLayout";
 import StudentLayout from '../../Student/StudentLayout/StudentLayout';

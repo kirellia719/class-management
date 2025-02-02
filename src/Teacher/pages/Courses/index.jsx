@@ -8,7 +8,7 @@ import Grid from "@mui/material/Grid2";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Menu, MenuItem, TextField, } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-import teacherAPI from "teacher-api";
+import teacherAPI from "../../teacherAPI";
 import ModalCreateCourse from "./ModalCreateCourse";
 
 import LoadingPage from "~/components/LoadingPage";

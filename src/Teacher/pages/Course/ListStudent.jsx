@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useQuery, useQueryClient } from "react-query";
 import { DataGrid } from "@mui/x-data-grid";
 import { useParams } from "react-router-dom";
-import teacherAPI from "teacher-api";
+import teacherAPI from "../../teacherAPI";
 
 import {
    Box,

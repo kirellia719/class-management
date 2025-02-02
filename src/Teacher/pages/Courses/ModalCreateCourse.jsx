@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 
-import teacherAPI from "teacher-api";
+import teacherAPI from "../../teacherAPI";
 import { toast } from "react-toastify";
 
 const ModalCreateCourse = () => {
