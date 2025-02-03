@@ -61,6 +61,9 @@ const teacherAPI = {
    //EXAM
    createExam: (exam) => api.post("/exam", exam),
    getAllExams: () => api.get("/exam/all"),
+   getExam: (examId) => api.get(`exam/${examId}`),
+   updateExam: (examId, data) => api.put(`/exam/${examId}`, data),
+   deleteExam: (examId) => api.delete(`/exam/${examId}`),
 };
 
 export default teacherAPI;
