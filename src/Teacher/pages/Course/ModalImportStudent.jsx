@@ -12,16 +12,10 @@ import { useParams } from "react-router-dom";
 const formattedColumns = [
    { field: "fullname", headerName: "Họ và tên" },
    {
-      field: "male",
-      headerName: "Giới tính",
-      renderCell: (params) => <div className="center-cell">{params.row.male}</div>,
-   },
-   {
       field: "birthday",
       headerName: "Ngày sinh",
       renderCell: (params) => <div className="center-cell">{dayjs(params.row.birthday).format("DD/MM/YYYY")}</div>,
    },
-   { field: "phone", headerName: "Số điện thoại" },
 ];
 
 const ImportExcelComponent = ({ onClose }) => {
@@ -31,7 +25,7 @@ const ImportExcelComponent = ({ onClose }) => {
    const [loading, setLoading] = useState(false);
 
    const [rows, setRows] = useState([]);
-   const [columns, setColumns] = useState([]);
+
    const [fileUploaded, setFileUploaded] = useState(false);
 
    // Xử lý khi chọn file Excel
@@ -51,22 +45,24 @@ const ImportExcelComponent = ({ onClose }) => {
          const ws = wb.Sheets[wsname];
 
          const excel = XLSX.utils.sheet_to_json(ws, { header: 1 });
-         const headers = excel[0];
-         const data = excel.filter((row) => {
+         const headers = excel[4];
+
+         const data = excel.slice(6).filter((row) => {
             return Object.values(row).some((value) => value != null && value !== "");
          });
+         // console.log(data);
 
          if (data.length > 0) {
-            const formattedRows = data.slice(1).map((row, rowIndex) => {
+            const formattedRows = data.map((row, rowIndex) => {
                let rowData = {};
 
                // Lặp qua các cột và gán giá trị vào object mới với key là fullname, male, birthday, phone
                rowData["fullname"] = row[headers.indexOf("Họ và tên")];
-               rowData["phone"] = row[headers.indexOf("Số điện thoại")];
+               // rowData["phone"] = row[headers.indexOf("Số điện thoại")];
 
                // Xử lý giới tính (Nam -> true, Nữ -> false)
-               const gender = row[headers.indexOf("Giới tính")];
-               rowData["male"] = !gender ? null : gender == "Nam" ? true : false; // Chuyển "Nam" thành true, "Nữ" thành false
+               // const gender = row[headers.indexOf("Giới tính")];
+               // rowData["male"] = !gender ? null : gender == "Nam" ? true : false; // Chuyển "Nam" thành true, "Nữ" thành false
 
                // Xử lý ngày sinh, nếu là số thì chuyển thành định dạng ngày tháng
                const birthDateIndex = headers.indexOf("Ngày sinh");
@@ -83,18 +79,13 @@ const ImportExcelComponent = ({ onClose }) => {
                      const [day, month, year] = birthValue.split("/").map(Number);
                      birthValue = dayjs(`${year}/${month}/${day}`).format("YYYY-MM-DD");
                   }
-
-                  console.log(birthValue);
                   rowData["birthday"] = birthValue;
                }
 
                return { id: rowIndex, ...rowData };
             });
-
-            setColumns(formattedColumns);
             setRows(formattedRows);
          } else {
-            setColumns([]);
             setRows([]);
          }
       };
@@ -105,8 +96,10 @@ const ImportExcelComponent = ({ onClose }) => {
       setLoading(true);
       try {
          const resArr = await Promise.all(rows.map((row) => teacherAPI.addStudent(courseId, row)));
-         queryClient.invalidateQueries("list-student");
-         onClose();
+         if (resArr) {
+            onClose();
+            queryClient.invalidateQueries("list-student");
+         }
       } catch (error) {
          console.error("Lỗi khi gửi dữ liệu:", error);
       }
@@ -160,9 +153,9 @@ const ImportExcelComponent = ({ onClose }) => {
             <>
                <div style={{ marginTop: 20 }}>
                   <DataGrid
-                     sx={{ height: 400 }}
+                     sx={{ height: 400, width: "100%" }}
                      rows={rows}
-                     columns={columns}
+                     columns={formattedColumns}
                      hideFooter // Ẩn footer, bỏ phân trang
                   />
                </div>

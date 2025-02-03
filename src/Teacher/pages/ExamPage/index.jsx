@@ -50,7 +50,6 @@ const ExamPage = () => {
          field: "stt",
          headerName: "STT",
          resizable: false,
-         renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
       },
       { field: "title", headerName: "Tên bài thi", flex: 1, resizable: false },
       {
@@ -82,7 +81,7 @@ const ExamPage = () => {
       },
    ];
 
-   const rows = exams.map((exam) => ({ ...exam, id: exam._id })); // Add actions column to rows
+   const rows = exams.map((exam, index) => ({ ...exam, id: exam._id, stt: index + 1 })); // Add actions column to rows
 
    return (
       <div className="ExamPage">

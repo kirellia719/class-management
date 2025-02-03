@@ -123,7 +123,6 @@ const CreateExamPage = () => {
    const handleSave = () => {
       const pack = {
          ...exam,
-         course: exam.course._id,
          questions: questions,
       };
       mutate(pack, {

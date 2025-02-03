@@ -56,21 +56,21 @@ const ListStudent = () => {
          toast.success(`Đã xóa ${arr.length} học sinh`, { autoClose: 2000 });
          setSelectedRows([]); // Xóa selection sau khi xóa dữ liệu
       }
-      queryClient.invalidateQueries("list-student");
    };
 
    const handleDelete = async (listStudent) => {
       setLoading(true);
       try {
          const resArr = await Promise.all(listStudent.map((id) => teacherAPI.deleteStudent(id)));
-         if (resArr.length > 0) {
-            return resArr;
+         if (resArr) {
+            queryClient.invalidateQueries("list-student");
          }
       } catch (error) {
          console.error(error);
+      } finally {
+         setDeleteRow(null);
+         setLoading(false);
       }
-      setDeleteRow(null);
-      setLoading(false);
    };
 
    const cols = [
