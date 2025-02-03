@@ -51,17 +51,21 @@ const ListStudent = () => {
 
    // Hàm xóa hàng đã chọn
    const handleDeleteRows = async () => {
-      await handleDelete(selectedRows);
-      setSelectedRows([]); // Xóa selection sau khi xóa dữ liệu
-      toast.success(`Đã xóa ${selectedRows.length} học sinh`, { autoClose: 2000 });
+      const arr = await handleDelete(selectedRows);
+      if (arr && arr.length > 0) {
+         toast.success(`Đã xóa ${arr.length} học sinh`, { autoClose: 2000 });
+         setSelectedRows([]); // Xóa selection sau khi xóa dữ liệu
+      }
+      queryClient.invalidateQueries("list-student");
    };
 
    const handleDelete = async (listStudent) => {
       setLoading(true);
       try {
-         const resArr = await Promise.all(listStudent.map((id) => teacherAPI.delete(`/student/${id}`)));
-
-         queryClient.invalidateQueries("list-student");
+         const resArr = await Promise.all(listStudent.map((id) => teacherAPI.deleteStudent(id)));
+         if (resArr.length > 0) {
+            return resArr;
+         }
       } catch (error) {
          console.error(error);
       }
@@ -140,13 +144,13 @@ const ListStudent = () => {
    useEffect(() => {
       if (data) {
          setTitle(data.name);
-         setBackButton("/courses")
+         setBackButton("/courses");
       }
 
       return () => {
          setTitle("");
          setBackButton("");
-      }
+      };
    }, [data, setBackButton, setTitle]);
 
    return (
