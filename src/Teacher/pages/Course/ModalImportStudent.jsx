@@ -79,9 +79,13 @@ const ImportExcelComponent = ({ onClose }) => {
                      const month = String(date.m).padStart(2, "0"); // Tháng, cộng 1 vì tháng bắt đầu từ 0
                      const year = date.y; // Lấy năm
                      birthValue = dayjs(`${year}/${month}/${day}`).format("YYYY-MM-DD");
+                  } else if (typeof birthValue === "string") {
+                     const [day, month, year] = birthValue.split("/").map(Number);
+                     birthValue = dayjs(`${year}/${month}/${day}`).format("YYYY-MM-DD");
                   }
+
+                  console.log(birthValue);
                   rowData["birthday"] = birthValue;
-                  // console.log(birthValue);
                }
 
                return { id: rowIndex, ...rowData };
