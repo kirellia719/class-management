@@ -29,7 +29,7 @@ const formatTime = (seconds) => {
    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
 };
 
-const ExamSubmission = ({ submission }) => {
+const ExamSubmission = ({ submission, onSubmit }) => {
    const navigate = useNavigate();
    const questionRefs = useRef({});
    const [answers, setAnswers] = useState({});
@@ -70,6 +70,7 @@ const ExamSubmission = ({ submission }) => {
 
    const submitExam = async () => {
       mutation.mutate();
+      onSubmit && onSubmit();
    };
 
    const handleAnswerChange = (questionId, answer) => {
@@ -79,10 +80,6 @@ const ExamSubmission = ({ submission }) => {
    const scrollToQuestion = (questionId) => {
       questionRefs.current[questionId]?.scrollIntoView({ behavior: "smooth", block: "start" });
    };
-
-   if (mutation.isLoading || mutation.isSuccess) {
-      return <div>Đang nộp bài ...</div>;
-   }
 
    return (
       <div className="SubmissionPage">
@@ -163,7 +160,7 @@ const ExamSubmission = ({ submission }) => {
                                     variant={answers[q._id] ? "contained" : "outlined"}
                                     color={answers[q._id] ? "primary" : "primary"}
                                     onClick={() => scrollToQuestion(q._id)}
-                                    sx={{ minWidth: 40, minHeight: 40 }}
+                                    sx={{ width: 40, height: 40 }}
                                  >
                                     {index + 1}
                                  </Button>
@@ -196,6 +193,8 @@ const SubmissionPage = () => {
    const { submissionId } = useParams();
    const navigate = useNavigate();
 
+   const [isSubmitted, setIsSubmitted] = useState(false)
+
    const { data: submission, isLoading } = useQuery("submissionDetails", async () => {
       const { data } = await studentAPI.getExamForSubmission(submissionId);
       return data;
@@ -203,7 +202,10 @@ const SubmissionPage = () => {
 
    if (isLoading) return <LoadingPage />;
    else if (submission) {
-      if (submission.isDone) {
+      if (!submission.isDone && isSubmitted) {
+         return <>Đang nộp bài ...</>
+      }
+      else if (submission.isDone) {
          return (
             <Stack sx={{ p: 2, m: 2 }} spacing={2}>
                <div>
@@ -224,7 +226,7 @@ const SubmissionPage = () => {
             </Stack>
          );
       }
-      return <ExamSubmission submission={submission} />;
+      return <ExamSubmission submission={submission} onSubmit={() => setIsSubmitted(true)} />;
    } else {
       return <>Lỗi</>;
    }

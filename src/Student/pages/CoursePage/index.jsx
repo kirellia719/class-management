@@ -68,7 +68,7 @@ const AssignmentsPage = () => {
                               <TableCell>{index + 1}</TableCell>
                               <TableCell>{exam.title}</TableCell>
                               <TableCell align="center">{exam.duration}</TableCell>
-                              <TableCell align="center">{`${exam.attempts}/${exam.attemptsAllowed}`}</TableCell>
+                              <TableCell align="center">{`${exam.attempts}${exam.attemptsAllowed ? `/${exam.attemptsAllowed}` : ""}`}</TableCell>
                               <TableCell align="center">
                                  {exam.maxScoreSubmission ? exam.maxScoreSubmission : !exam.attempts ? "Chưa có" : 0}
                               </TableCell>

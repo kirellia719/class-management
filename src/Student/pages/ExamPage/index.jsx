@@ -62,6 +62,7 @@ const ExamPreparation = () => {
     else {
         const { exam, submissions } = data;
         const isDoing = submissions.find(submission => !submission.isDone);
+        console.log(submissions);
 
         const maxScoreSubmissions = submissions.reduce((maxScore, submission) => (submission.score && maxScore < submission.score) ? submission.score : maxScore, 0)
 
@@ -72,9 +73,15 @@ const ExamPreparation = () => {
                     <div>{
                         isDoing
                             ? <Button variant="contained" onClick={() => navigate(`/submit/${isDoing._id}`)}>Tiếp tục</Button>
-                            : (exam.attemptsAllowed > submissions.length && exam.isOpen ? <Button variant="contained" onClick={joinExam}>{submissions.length == 0 ? "Vào làm" : "Làm lại"}</Button> : " ")
+                            : ((!exam.attemptsAllowed || exam.attemptsAllowed > submissions.length) && exam.isOpen ? <Button variant="contained" onClick={joinExam}>{submissions.length == 0 ? "Vào làm" : "Làm bài"}</Button> : " ")
                     }
                     </div>
+                </Paper>
+                <Paper sx={{ p: 2 }}>
+                    <Stack spacing={2}>
+                        <b>Mô tả: </b>
+                        <p>{exam.description}</p>
+                    </Stack>
                 </Paper>
                 <TableContainer component={Paper}>
                     <Table>
@@ -93,7 +100,7 @@ const ExamPreparation = () => {
                                     <TableCell align='center'>{formatAttemptDate(submission.createdAt)}</TableCell>
                                     <TableCell align='center'>{submission.score == null ? "Không có điểm" : `${submission.score}/${exam.numberQuestions}`}</TableCell>
                                     <TableCell align='center'>
-                                        {submission.score == null ? "Đang làm" : submission.isDone ? "Đã nộp" : "Chưa nộp"}
+                                        {submission.score != null ? "Đã nộp" : (!submission.isDone ? "Đang làm" : "Chưa nộp")}
                                     </TableCell>
                                 </TableRow>
                             ))}
