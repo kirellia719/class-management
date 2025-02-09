@@ -62,7 +62,6 @@ const ExamPreparation = () => {
     else {
         const { exam, submissions } = data;
         const isDoing = submissions.find(submission => !submission.isDone);
-        console.log(submissions);
 
         const maxScoreSubmissions = submissions.reduce((maxScore, submission) => (submission.score && maxScore < submission.score) ? submission.score : maxScore, 0)
 
