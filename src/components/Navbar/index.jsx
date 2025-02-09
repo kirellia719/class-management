@@ -5,6 +5,9 @@ import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRound
 import useAuthStore from "../../store/authStore";
 import useTitleStore from "../../store/titleStore";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import AvatarPicker from "./AvatarPicker";
+import env from "env";
 
 function stringToColor(string) {
    let hash = 0;
@@ -35,10 +38,12 @@ function stringAvatar(name) {
       children: `${arrName[0][0]}${arrName[arrName.length - 1][0]}`,
    };
 }
-const Navbar = ({ drawerWidth = 0, handleDrawerToggle = () => {} }) => {
+const Navbar = ({ drawerWidth = 0, handleDrawerToggle = () => { } }) => {
    const navigate = useNavigate();
    const { user } = useAuthStore();
    const { title, backButton } = useTitleStore();
+
+   const [openAvatar, setOpenAvatar] = useState(false)
 
    if (!user) return null; // Return null if user is not authenticated
    else
@@ -50,6 +55,7 @@ const Navbar = ({ drawerWidth = 0, handleDrawerToggle = () => {} }) => {
                   ml: { sm: `${drawerWidth}px` },
                }}
             >
+               <AvatarPicker open={openAvatar} onClose={() => setOpenAvatar(false)} />
                <Toolbar className="navbar">
                   <div className="navbar-left">
                      <IconButton
@@ -78,7 +84,10 @@ const Navbar = ({ drawerWidth = 0, handleDrawerToggle = () => {} }) => {
                         <Typography className="name">{user.fullname}</Typography>
                         <div className="career">{user.career == 1 ? "Giáo viên" : "Học sinh"}</div>
                      </div>
-                     <Avatar className="avatar" {...stringAvatar(user.fullname)} />
+                     <div onClick={() => setOpenAvatar(true)}>
+                        {user.avatar ? <Avatar src={`${env.BE_URL}${user.avatar}`} /> : <Avatar className="avatar" {...stringAvatar(user.fullname)} />}
+                     </div>
+
                   </div>
                </Toolbar>
             </div>

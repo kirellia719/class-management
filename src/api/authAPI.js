@@ -47,6 +47,8 @@ const api = {
 const authAPI = {
     login: (user) => api.post(`/auth/login`, user),
     getMe: () => api.get(`/auth/me`),
+    getAvatars: () => api.get(`/auth/avatar`),
+    updateAvatar: (avatar) => api.put(`/auth/change-avatar`, { avatar }),
 }
 
 export default authAPI;

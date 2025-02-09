@@ -22,6 +22,13 @@ const useAuthStore = create(
                 ...state,
                 user: user
             })),
+            setAvatar: avatar => set(state => ({
+                ...state,
+                user: {
+                    ...state.user,
+                    avatar: avatar,
+                }
+            })),
             logout: () => {
                 localStorage.removeItem(tokenName);
                 set(() => ({
