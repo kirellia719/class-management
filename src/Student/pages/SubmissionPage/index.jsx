@@ -41,16 +41,21 @@ const ExamSubmission = ({ submission, onSubmit }) => {
    const exam = submission.exam;
 
    useEffect(() => {
+      const savedAnswers = JSON.parse(localStorage.getItem(`submission_${submission._id}_answers`)) || {};
+      setAnswers(savedAnswers);
+
       let timer;
       if (!submission.isExpired) {
+         const remainingTime =
+            exam.duration * 60 + 1 - Math.floor((Date.now() - new Date(submission.createdAt).getTime()) / 1000);
+         setTimeleft(remainingTime);
          timer = setInterval(() => {
-            const remainingTime =
-               exam.duration * 60 + 1 - Math.floor((Date.now() - new Date(submission.createdAt).getTime()) / 1000);
-            if (remainingTime < 0) {
+
+            if (timeLeft < 0) {
                clearInterval(timer);
                submitExam();
             } else {
-               setTimeleft(remainingTime);
+               setTimeleft(prev => prev - 1);
             }
          }, 1000);
       }
@@ -66,6 +71,9 @@ const ExamSubmission = ({ submission, onSubmit }) => {
       } catch (error) {
          console.log(error);
       }
+      finally {
+         localStorage.removeItem(`submission_${submission._id}_answers`)
+      }
    });
 
    const submitExam = async () => {
@@ -74,7 +82,9 @@ const ExamSubmission = ({ submission, onSubmit }) => {
    };
 
    const handleAnswerChange = (questionId, answer) => {
-      setAnswers((prev) => ({ ...prev, [questionId]: answer }));
+      const updatedAnswers = { ...answers, [questionId]: answer };
+      setAnswers(updatedAnswers);
+      localStorage.setItem(`submission_${submission._id}_answers`, JSON.stringify(updatedAnswers));
    };
 
    const scrollToQuestion = (questionId) => {

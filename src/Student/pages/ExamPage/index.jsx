@@ -77,12 +77,13 @@ const ExamPreparation = () => {
                     }
                     </div>
                 </Paper>
-                <Paper sx={{ p: 2 }}>
+                {exam.description && <Paper sx={{ p: 2 }}>
                     <Stack spacing={2}>
                         <b>Mô tả: </b>
                         <p>{exam.description}</p>
                     </Stack>
-                </Paper>
+                </Paper>}
+
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
