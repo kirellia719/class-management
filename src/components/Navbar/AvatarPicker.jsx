@@ -68,25 +68,30 @@ const AvatarPicker = ({ open, onClose }) => {
         }
     }
 
-    if (isLoading) return <div>Loading...</div>;
     return (
         <Dialog open={open} onClose={onClose}>
-            <div className="avatar-picker">
-                <div className="avatar-list">
-                    <div className={`avatar ${!avatar ? "active" : ""}`} onClick={() => handleAvatarSelect("")}>
-                        <Avatar variant="square" style={{ width: "100%", height: "100%", fontSize: "2rem" }} {...stringAvatar(user.fullname)} />
-                    </div>
-                    {data && data.map(a => (
-                        <div key={a} className={`avatar ${a == avatar ? "active" : ""}`} onClick={() => handleAvatarSelect(a)}>
-                            <img src={`${env.BE_URL}${a}`} alt={""} />
+            {isLoading
+                ? <>Loading ...</>
+                : <>
+                    <div className="avatar-picker">
+
+                        <div className="avatar-list">
+                            <div className={`avatar ${!avatar ? "active" : ""}`} onClick={() => handleAvatarSelect("")}>
+                                <Avatar variant="square" style={{ width: "100%", height: "100%", fontSize: "2rem" }} {...stringAvatar(user.fullname)} />
+                            </div>
+                            {data && data.map(a => (
+                                <div key={a} className={`avatar ${a == avatar ? "active" : ""}`} onClick={() => handleAvatarSelect(a)}>
+                                    <img src={`${env.BE_URL}${a}`} alt={""} />
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-            </div>
-            <DialogActions>
-                <Button onClick={onClose} variant="outlined">Huỷ</Button>
-                <Button onClick={updateAvatar} variant="contained" color="warning">Chọn</Button>
-            </DialogActions>
+                    </div>
+                    <DialogActions>
+                        <Button onClick={onClose} variant="outlined">Huỷ</Button>
+                        <Button onClick={updateAvatar} variant="contained" color="warning">Chọn</Button>
+                    </DialogActions>
+                </>}
+
 
         </Dialog>
     )

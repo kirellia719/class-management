@@ -11,7 +11,7 @@ const headers = {
 
 const axios = a.create({
     baseURL: BE_URL, // URL cơ sở cho API
-    timeout: 3000, // Thời gian chờ tối đa là 3 giây (3000 ms)
+    // timeout: 3000, // Thời gian chờ tối đa là 3 giây (3000 ms)
 });
 
 const updateHeader = () => {
